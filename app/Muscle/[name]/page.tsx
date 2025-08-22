@@ -2,17 +2,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-type PageProps = {
-  params: {
-    name: string;
-  };
-};
-
-export default function MusclePage({ params }: PageProps) {
+export default function MusclePage({ params }: { params: { name: string } }) {
   const { name } = params;
   const decodedName = decodeURIComponent(name);
   const storageKey = `logs-${decodedName}`;
 
+  // Initiera list direkt från localStorage
   const [list, setList] = useState<string[]>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem(storageKey);
@@ -30,6 +25,7 @@ export default function MusclePage({ params }: PageProps) {
     setInfo("");
   };
 
+  // Spara listan i localStorage varje gång den ändras
   useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(list));
   }, [list, storageKey]);
